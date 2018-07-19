@@ -29,12 +29,9 @@ public class BlogService {
 	BlogRepository blogRepository;
 
 	@PostMapping("/api/blog")
-	public ResponseEntity<HttpStatus> createBlog(@RequestBody Blog blog, HttpSession session) {
-		Blog savedBlog = blogRepository.save(blog);
-		if (savedBlog != null) {
-			return ResponseEntity.ok(HttpStatus.OK);
-		}
-		return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
+	public Blog createBlog(@RequestBody Blog blog, HttpSession session) {
+		return blogRepository.save(blog);
+		
 	}
 	
 	@PutMapping("/api/blog")
