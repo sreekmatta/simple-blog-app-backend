@@ -1,7 +1,9 @@
 package com.example.simpleblogappbackend.services;
 
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import com.example.simpleblogappbackend.models.Blog;
 import com.example.simpleblogappbackend.repository.BlogRepository;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class BlogService {
 
 	@Autowired
@@ -45,10 +47,23 @@ public class BlogService {
 	}
 	
 	@GetMapping("/api/blog/{id}")
-	public Optional<Blog> findBlogById(@PathVariable("id") int id, HttpSession session) {
-		return blogRepository.findById(id);
+	public Blog findBlogById(@PathVariable("id") int id, HttpSession session, 
+			HttpServletResponse response) {
+		Optional<Blog> data = blogRepository.findById(id);
+		if(data.isPresent()) {
+			return data.get();
+		}
+		else {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return null;
+		}
 	}
 	
+	@GetMapping("/api/blog")
+	public List finaAllBlogs( HttpSession session,HttpServletResponse response) {
+		return blogRepository.findAll();
+		
+	}
 	@DeleteMapping("/api/blog/{id}")
 	public void deleteBlogById(@PathVariable("id") int id, HttpSession session) {
 		blogRepository.deleteById(id);
