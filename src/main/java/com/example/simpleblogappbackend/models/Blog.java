@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.mysql.jdbc.Blob;
+
 @Entity
 public class Blog {
 	@Id
@@ -15,7 +17,7 @@ public class Blog {
 	private int id;
 	private String name;
 	private String description;
-	private String text;
+	private Blob text;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -38,10 +40,10 @@ public class Blog {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getText() {
+	public Blob getText() {
 		return text;
 	}
-	public void setText(String text) {
+	public void setText(Blob text) {
 		this.text = text;
 	}
 	public Date getCreated() {
