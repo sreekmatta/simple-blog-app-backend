@@ -33,16 +33,23 @@ public class BlogService {
 		return blogRepository.save(blog);
 		
 	}
-	
+
 	@PutMapping("/api/blog")
-	public ResponseEntity<HttpStatus> updateBlog(@RequestBody Blog blog, HttpSession session) {
-		Blog updatedBlog = blogRepository.save(blog);
-		if (updatedBlog != null) {
-			return ResponseEntity.ok(HttpStatus.OK);
+	public ResponseEntity<HttpStatus> updateBlog(@RequestBody Blog newblog, HttpSession session) {
+
+		Optional<Blog> updatedBlogOptional = blogRepository.findById(newblog.getId());
+
+		if (updatedBlogOptional.isPresent()) {
+			Blog updatedBlog = updatedBlogOptional.get();
+			if (updatedBlog != null) {
+				updatedBlog.set(newblog);
+				blogRepository.save(updatedBlog);
+				return ResponseEntity.ok(HttpStatus.OK);
+			}
 		}
 		return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@GetMapping("/api/blog/{id}")
 	public Blog findBlogById(@PathVariable("id") int id, HttpSession session, 
 			HttpServletResponse response) {
@@ -57,13 +64,14 @@ public class BlogService {
 	}
 	
 	@GetMapping("/api/blog")
-	public List finaAllBlogs( HttpSession session,HttpServletResponse response) {
+	public List<Blog> finaAllBlogs( HttpSession session,HttpServletResponse response) {
 		return blogRepository.findAll();
 		
 	}
+
 	@DeleteMapping("/api/blog/{id}")
 	public void deleteBlogById(@PathVariable("id") int id, HttpSession session) {
 		blogRepository.deleteById(id);
 	}
-	
+
 }
