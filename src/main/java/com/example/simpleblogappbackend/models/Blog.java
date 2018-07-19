@@ -56,6 +56,13 @@ public class Blog {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
+	public void set(Blog newblog) {
+		this.name = newblog.getName();
+		this.text = newblog.getText();
+		this.description = newblog.getDescription();
+		this.created = newblog.getCreated();
+		this.updated = newblog.getUpdated();
+	}
 	
 	
 }
